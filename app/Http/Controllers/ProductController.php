@@ -38,7 +38,7 @@ class ProductController extends Controller
     {
         $storeData = $request->validate([
             'name' => 'required|max:255',
-            'description' => 'required|max:255',
+            'description' => 'required',
             'location' => 'required|max:255',
             'country' => 'required|max:255',
             'price' => 'required|numeric',
