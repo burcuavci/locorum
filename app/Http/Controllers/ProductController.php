@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -13,7 +14,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $product = Product::all();
+        return view('index', compact('product'));
     }
 
     /**
@@ -23,7 +25,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('create');
     }
 
     /**
@@ -34,7 +36,18 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $storeData = $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required|max:255',
+            'location' => 'required|max:255',
+            'country' => 'required|max:255',
+            'price' => 'required|numeric',
+            'image' => 'required|max:255',
+
+        ]);
+        $product = Product::create($storeData);
+
+        return redirect('/products')->with('completed', 'Product has been created!');
     }
 
     /**
@@ -56,7 +69,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('edit', compact('product'));
     }
 
     /**
@@ -68,7 +82,18 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $updateData = $request->validate([
+            'name' => 'required|max:255',
+            'description' => 'required|max:255',
+            'location' => 'required|max:255',
+            'country' => 'required|max:255',
+            'price' => 'required|numeric',
+            'image' => 'required|max:255',
+
+        ]);
+        Product::whereId($id) -> update($updateData);
+
+        return redirect('/products')->with('completed', 'Product has been updated!');
     }
 
     /**
@@ -79,6 +104,10 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect('/products')->with('completed', 'Product has been deleted');
+    
     }
 }
